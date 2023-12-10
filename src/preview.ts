@@ -3,9 +3,10 @@ import { makeDiv } from './html'
 export default class Preview {
 	$widget=makeDiv('preview')()
 
-	render(imageSizeX: number, imageSizeY: number): void {
-		const markerSizeX=20
-		const markerSizeY=30
+	render(
+		imageSizeX: number, imageSizeY: number,
+		markerSizeX: number, markerSizeY: number
+	): void {
 		const strokeWidth=1
 		const viewBoxMinX=-imageSizeX/2
 		const viewBoxMinY=-(imageSizeY-markerSizeY-strokeWidth/2)-markerSizeX/2

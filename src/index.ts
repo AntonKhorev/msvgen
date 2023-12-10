@@ -10,17 +10,25 @@ function main() {
 }
 
 function makeControls(preview: Preview): HTMLElement {
-	const $imageSizeXInput=makeElement('input')()()
-	$imageSizeXInput.type='number'
-	$imageSizeXInput.min='1'
-	$imageSizeXInput.value='32'
-	const $imageSizeYInput=makeElement('input')()()
-	$imageSizeYInput.type='number'
-	$imageSizeYInput.min='1'
-	$imageSizeYInput.value='32'
-	;($imageSizeXInput.oninput=$imageSizeYInput.oninput=()=>{
-		preview.render(Number($imageSizeXInput.value),Number($imageSizeYInput.value))
-	})()
+	const $imageSizeXInput=makeNumberInput(32)
+	const $imageSizeYInput=makeNumberInput(32)
+	const $markerSizeXInput=makeNumberInput(21)
+	const $markerSizeYInput=makeNumberInput(31)
+	const $inputs=[
+			$imageSizeXInput,$imageSizeYInput,
+			$markerSizeXInput,$markerSizeYInput
+	]
+	const n=$input=>Number($input.value)
+	const renderPreview=()=>{
+		preview.render(
+			n($imageSizeXInput),n($imageSizeYInput),
+			n($markerSizeXInput),n($markerSizeYInput)
+		)
+	}
+	for (const $input of $inputs) {
+		$input.oninput=renderPreview
+	}
+	renderPreview()
 	return makeDiv('controls')(
 		makeDiv('input-group')(
 			makeLabel()(
@@ -31,6 +39,24 @@ function makeControls(preview: Preview): HTMLElement {
 			makeLabel()(
 				`Image height `,$imageSizeYInput
 			)
+		),
+		makeDiv('input-group')(
+			makeLabel()(
+				`Marker width `,$markerSizeXInput
+			),
+		),
+		makeDiv('input-group')(
+			makeLabel()(
+				`Marker height `,$markerSizeYInput
+			)
 		)
 	)
+}
+
+function makeNumberInput(value: number): HTMLInputElement {
+	const $input=makeElement('input')()()
+	$input.type='number'
+	$input.min='1'
+	$input.value=String(value)
+	return $input
 }
