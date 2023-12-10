@@ -1,3 +1,4 @@
+import Marker from './marker'
 import Preview from './preview'
 import { makeElement, makeDiv, makeLabel } from './html'
 
@@ -29,13 +30,14 @@ function makeControls(preview: Preview): HTMLElement {
 	]
 	const n=$input=>Number($input.value)
 	const renderPreview=()=>{
-		preview.render(
+		const marker=new Marker(
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
 			$holeSelect.value,
 			n($strokeWidthInput),
 			$fillCheckbox.checked
 		)
+		preview.render(marker)
 	}
 	for (const $input of $inputs) {
 		$input.oninput=renderPreview
