@@ -23,7 +23,11 @@ export default class Marker {
 	}
 
 	get svg(): string {
-		return `<svg width="${this.imageSizeX}" height="${this.imageSizeY}" viewBox="${this.viewBox}">${this.content}</svg>`
+		return (
+			`<svg width="${this.imageSizeX}" height="${this.imageSizeY}" viewBox="${this.viewBox}">\n`+
+			this.content+`\n`+
+			`</svg>`
+		)
 	}
 }
 
