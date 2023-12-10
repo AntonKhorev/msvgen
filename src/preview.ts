@@ -6,11 +6,14 @@ export default class Preview {
 	render(
 		imageSizeX: number, imageSizeY: number,
 		markerSizeX: number, markerSizeY: number,
-		strokeWidth: number
+		strokeWidth: number,
+		fill: boolean
 	): void {
 		const viewBoxMinX=-imageSizeX/2
 		const viewBoxMinY=-(imageSizeY-markerSizeY-strokeWidth/2)-markerSizeX/2
-		let content=`<path d="${computeMarkerOutlinePath(markerSizeY,markerSizeX/2)}" fill="none" stroke="currentColor"`
+		let content=`<path d="${computeMarkerOutlinePath(markerSizeY,markerSizeX/2)}"`
+		content+=` fill="${fill?'canvas':'none'}"`
+		content+=` stroke="currentColor"`
 		if (strokeWidth!=1) content+=` stroke-width="${strokeWidth}"`
 		content+=`/>`
 		this.$widget.innerHTML=`<svg width="${imageSizeX}" height="${imageSizeY}" viewBox="${viewBoxMinX} ${viewBoxMinY} ${imageSizeX} ${imageSizeY}">${content}</svg>`

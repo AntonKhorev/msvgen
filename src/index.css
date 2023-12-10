@@ -31,7 +31,7 @@
 		flex-direction: column;
 		gap: .5rem;
 
-		.input-group input {
+		.input-group input[type="number"] {
 			display: block;
 			box-sizing: border-box;
 			width: 100%;

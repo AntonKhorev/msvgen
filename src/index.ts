@@ -15,17 +15,20 @@ function makeControls(preview: Preview): HTMLElement {
 	const $markerSizeXInput=makeNumberInput(21)
 	const $markerSizeYInput=makeNumberInput(31)
 	const $strokeWidthInput=makeNumberInput(1)
+	const $fillCheckbox=makeCheckbox()
 	const $inputs=[
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
-			$strokeWidthInput
+			$strokeWidthInput,
+			$fillCheckbox
 	]
 	const n=$input=>Number($input.value)
 	const renderPreview=()=>{
 		preview.render(
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
-			n($strokeWidthInput)
+			n($strokeWidthInput),
+			$fillCheckbox.checked
 		)
 	}
 	for (const $input of $inputs) {
@@ -61,6 +64,11 @@ function makeControls(preview: Preview): HTMLElement {
 			makeLabel()(
 				`Stroke width `,$strokeWidthInput
 			)
+		),
+		makeDiv('input-group')(
+			makeLabel()(
+				$fillCheckbox,` Fill`
+			)
 		)
 	)
 }
@@ -71,4 +79,10 @@ function makeNumberInput(value: number): HTMLInputElement {
 	$input.min='1'
 	$input.value=String(value)
 	return $input
+}
+
+function makeCheckbox(): HTMLInputElement {
+	const $checkbox=makeElement('input')()()
+	$checkbox.type='checkbox'
+	return $checkbox
 }
