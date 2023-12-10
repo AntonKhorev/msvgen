@@ -1,0 +1,28 @@
+:root {
+	--frame: solid 1px #888;
+}
+
+.panel {
+	max-width: 760px;
+	margin: auto;
+	border: var(--frame);
+	border-radius: .5rem;
+	display: flex;
+	flex-direction: column;
+	@media (width >= 768px) {
+		flex-direction: row;
+	}
+
+	> * {
+		flex: 1;
+		padding: 1rem;
+	}
+	> *:not(:first-child) {
+		@media (width < 768px) {
+			border-top: var(--frame);
+		}
+		@media (width >= 768px) {
+			border-inline-start: var(--frame);
+		}
+	}
+}

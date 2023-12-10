@@ -8,6 +8,7 @@ async function build(srcDir,dstDir) {
 	await cleanupDirectory(dstDir)
 	await buildJs(srcDir,dstDir)
 	await fs.copyFile(`${srcDir}/index.html`,`${dstDir}/index.html`)
+	await fs.copyFile(`${srcDir}/index.css`,`${dstDir}/index.css`)
 }
 
 async function cleanupDirectory(dir) {

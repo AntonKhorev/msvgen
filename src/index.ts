@@ -4,7 +4,7 @@ main()
 
 function main() {
 	const $controls=makeDiv()(`TODO controls`)
-	const $panel=makeDiv()($controls,makePreview())
+	const $panel=makeDiv('panel')($controls,makePreview())
 	document.body.append($panel)
 }
 
