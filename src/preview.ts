@@ -5,9 +5,9 @@ export default class Preview {
 
 	render(
 		imageSizeX: number, imageSizeY: number,
-		markerSizeX: number, markerSizeY: number
+		markerSizeX: number, markerSizeY: number,
+		strokeWidth: number
 	): void {
-		const strokeWidth=1
 		const viewBoxMinX=-imageSizeX/2
 		const viewBoxMinY=-(imageSizeY-markerSizeY-strokeWidth/2)-markerSizeX/2
 		let content=`<path d="${computeMarkerOutlinePath(markerSizeY,markerSizeX/2)}" fill="none" stroke="currentColor"`

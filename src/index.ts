@@ -14,15 +14,18 @@ function makeControls(preview: Preview): HTMLElement {
 	const $imageSizeYInput=makeNumberInput(32)
 	const $markerSizeXInput=makeNumberInput(21)
 	const $markerSizeYInput=makeNumberInput(31)
+	const $strokeWidthInput=makeNumberInput(1)
 	const $inputs=[
 			$imageSizeXInput,$imageSizeYInput,
-			$markerSizeXInput,$markerSizeYInput
+			$markerSizeXInput,$markerSizeYInput,
+			$strokeWidthInput
 	]
 	const n=$input=>Number($input.value)
 	const renderPreview=()=>{
 		preview.render(
 			n($imageSizeXInput),n($imageSizeYInput),
-			n($markerSizeXInput),n($markerSizeYInput)
+			n($markerSizeXInput),n($markerSizeYInput),
+			n($strokeWidthInput)
 		)
 	}
 	for (const $input of $inputs) {
@@ -48,6 +51,11 @@ function makeControls(preview: Preview): HTMLElement {
 		makeDiv('input-group')(
 			makeLabel()(
 				`Marker height `,$markerSizeYInput
+			)
+		),
+		makeDiv('input-group')(
+			makeLabel()(
+				`Stroke width `,$strokeWidthInput
 			)
 		)
 	)
