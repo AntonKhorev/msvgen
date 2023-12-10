@@ -25,4 +25,21 @@
 			border-inline-start: var(--frame);
 		}
 	}
+
+	.preview {
+		display: grid;
+		place-items: center;
+
+		svg {
+			border: var(--frame);
+			background-image: conic-gradient(
+				#0000,
+				#0000 .25turn, #0001 .25turn,
+				#0001 .50turn, #0000 .50turn,
+				#0000 .75turn, #0001 .75turn,
+				#0001
+			);
+			background-size: 16px 16px;
+		}
+	}
 }

@@ -9,7 +9,7 @@ function main() {
 }
 
 function makePreview(): HTMLElement {
-	const $preview=makeDiv()()
+	const $preview=makeDiv('preview')()
 	const imageSizeX=32
 	const imageSizeY=32
 	const markerSizeX=20
