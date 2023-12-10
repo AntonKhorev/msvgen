@@ -1,16 +1,22 @@
 import Marker from './marker'
 import Preview from './preview'
+import Output from './output'
 import { makeElement, makeDiv, makeLabel } from './html'
 
 main()
 
 function main() {
 	const preview=new Preview
-	const $panel=makeDiv('panel')(makeControls(preview),preview.$widget)
-	document.body.append($panel)
+	const output=new Output
+	const $panel=makeDiv('panel')(
+		makeControls(preview,output),preview.$widget
+	)
+	document.body.append(
+		$panel,output.$widget
+	)
 }
 
-function makeControls(preview: Preview): HTMLElement {
+function makeControls(preview: Preview, output: Output): HTMLElement {
 	const $imageSizeXInput=makeNumberInput(32)
 	const $imageSizeYInput=makeNumberInput(32)
 	const $markerSizeXInput=makeNumberInput(21)
@@ -29,7 +35,7 @@ function makeControls(preview: Preview): HTMLElement {
 			$fillCheckbox
 	]
 	const n=$input=>Number($input.value)
-	const renderPreview=()=>{
+	const render=()=>{
 		const marker=new Marker(
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
@@ -38,11 +44,12 @@ function makeControls(preview: Preview): HTMLElement {
 			$fillCheckbox.checked
 		)
 		preview.render(marker)
+		output.render(marker)
 	}
 	for (const $input of $inputs) {
-		$input.oninput=renderPreview
+		$input.oninput=render
 	}
-	renderPreview()
+	render()
 	return makeDiv('controls')(
 		makeDiv('input-group','double')(
 			makeDiv('input-group')(
