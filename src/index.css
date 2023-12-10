@@ -4,7 +4,7 @@
 
 .panel, details {
 	box-sizing: border-box;
-	max-width: 768px;
+	max-width: 1024px;
 	margin: auto;
 	border: var(--frame);
 	border-radius: .5rem;
@@ -12,7 +12,7 @@
 
 .panel {
 	display: flex;
-	@media (width < 768px) {
+	@media (width < 500px) {
 		flex-direction: column;
 	}
 
@@ -21,10 +21,10 @@
 		padding: 1rem;
 	}
 	> *:not(:first-child) {
-		@media (width < 768px) {
+		@media (width < 500px) {
 			border-top: var(--frame);
 		}
-		@media (width >= 768px) {
+		@media (width >= 500px) {
 			border-inline-start: var(--frame);
 		}
 	}
@@ -44,7 +44,7 @@
 		.input-group.double {
 			display: flex;
 			gap: inherit;
-			@container (width < 300px) {
+			@container (width < 250px) {
 				flex-direction: column;
 			}
 
@@ -73,7 +73,7 @@
 }
 
 details {
-	margin-top: 1rem;
+	margin-top: .5rem;
 	padding: 1rem;
 
 	pre {
