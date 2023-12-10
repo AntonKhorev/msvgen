@@ -2,11 +2,15 @@
 	--frame: solid 1px #888;
 }
 
-.panel {
-	max-width: 760px;
+.panel, details {
+	box-sizing: border-box;
+	max-width: 768px;
 	margin: auto;
 	border: var(--frame);
 	border-radius: .5rem;
+}
+
+.panel {
 	display: flex;
 	@media (width < 768px) {
 		flex-direction: column;
@@ -65,5 +69,16 @@
 			);
 			background-size: 16px 16px;
 		}
+	}
+}
+
+details {
+	margin-top: 1rem;
+	padding: 1rem;
+
+	pre {
+		overflow-x: scroll;
+		padding: .5rem;
+		background: #8884;
 	}
 }

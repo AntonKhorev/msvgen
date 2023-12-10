@@ -5,7 +5,7 @@ export default class Output {
 	private $code=makeElement('code')()()
 	$widget=makeElement('details')()(
 		makeElement('summary')()(`SVG`),
-		this.$code
+		makeElement('pre')()(this.$code)
 	)
 
 	render(marker: Marker): void {
