@@ -14,11 +14,16 @@ function makeControls(preview: Preview): HTMLElement {
 	const $imageSizeYInput=makeNumberInput(32)
 	const $markerSizeXInput=makeNumberInput(21)
 	const $markerSizeYInput=makeNumberInput(31)
+	const $holeSelect=makeElement('select')()(
+		new Option('none'),
+		new Option('round')
+	)
 	const $strokeWidthInput=makeNumberInput(1)
 	const $fillCheckbox=makeCheckbox()
 	const $inputs=[
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
+			$holeSelect,
 			$strokeWidthInput,
 			$fillCheckbox
 	]
@@ -27,6 +32,7 @@ function makeControls(preview: Preview): HTMLElement {
 		preview.render(
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
+			$holeSelect.value,
 			n($strokeWidthInput),
 			$fillCheckbox.checked
 		)
@@ -58,6 +64,11 @@ function makeControls(preview: Preview): HTMLElement {
 				makeLabel()(
 					`Marker height `,$markerSizeYInput
 				)
+			)
+		),
+		makeDiv('input-group')(
+			makeLabel()(
+				`Hole `,$holeSelect
 			)
 		),
 		makeDiv('input-group')(
