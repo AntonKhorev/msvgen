@@ -1,34 +1,36 @@
-import { makeDiv } from './html'
+import Preview from './preview'
+import { makeElement, makeDiv, makeLabel } from './html'
 
 main()
 
 function main() {
-	const $controls=makeDiv()(`TODO controls`)
-	const $panel=makeDiv('panel')($controls,makePreview())
+	const preview=new Preview
+	const $panel=makeDiv('panel')(makeControls(preview),preview.$widget)
 	document.body.append($panel)
 }
 
-function makePreview(): HTMLElement {
-	const $preview=makeDiv('preview')()
-	const imageSizeX=32
-	const imageSizeY=32
-	const markerSizeX=20
-	const markerSizeY=30
-	const strokeWidth=1
-	const viewBoxMinX=-imageSizeX/2
-	const viewBoxMinY=-(imageSizeY-markerSizeY-strokeWidth/2)-markerSizeX/2
-	let content=`<path d="${computeMarkerOutlinePath(markerSizeY,markerSizeX/2)}" fill="none" stroke="currentColor"`
-	if (strokeWidth!=1) content+=` stroke-width="${strokeWidth}"`
-	content+=`/>`
-	$preview.innerHTML=`<svg width="${imageSizeX}" height="${imageSizeY}" viewBox="${viewBoxMinX} ${viewBoxMinY} ${imageSizeX} ${imageSizeY}">${content}</svg>`
-	return $preview
-}
-
-function computeMarkerOutlinePath(h: number, r: number): string {
-	const rp=h-r
-	const y=r**2/rp
-	const x=Math.sqrt(r**2-y**2)
-	const xf=x.toFixed(2)
-	const yf=y.toFixed(2)
-	return `M0,${rp} L-${xf},${yf} A${r},${r} 0 1 1 ${xf},${yf} Z`
+function makeControls(preview: Preview): HTMLElement {
+	const $imageSizeXInput=makeElement('input')()()
+	$imageSizeXInput.type='number'
+	$imageSizeXInput.min='1'
+	$imageSizeXInput.value='32'
+	const $imageSizeYInput=makeElement('input')()()
+	$imageSizeYInput.type='number'
+	$imageSizeYInput.min='1'
+	$imageSizeYInput.value='32'
+	;($imageSizeXInput.oninput=$imageSizeYInput.oninput=()=>{
+		preview.render(Number($imageSizeXInput.value),Number($imageSizeYInput.value))
+	})()
+	return makeDiv('controls')(
+		makeDiv('input-group')(
+			makeLabel()(
+				`Image width `,$imageSizeXInput
+			),
+		),
+		makeDiv('input-group')(
+			makeLabel()(
+				`Image height `,$imageSizeYInput
+			)
+		)
+	)
 }

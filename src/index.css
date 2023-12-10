@@ -26,6 +26,18 @@
 		}
 	}
 
+	.controls {
+		display: flex;
+		flex-direction: column;
+		gap: .5rem;
+
+		.input-group input {
+			display: block;
+			box-sizing: border-box;
+			width: 100%;
+		}
+	}
+
 	.preview {
 		display: grid;
 		place-items: center;
