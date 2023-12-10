@@ -33,24 +33,28 @@ function makeControls(preview: Preview): HTMLElement {
 	}
 	renderPreview()
 	return makeDiv('controls')(
-		makeDiv('input-group')(
-			makeLabel()(
-				`Image width `,$imageSizeXInput
+		makeDiv('input-group','double')(
+			makeDiv('input-group')(
+				makeLabel()(
+					`Image width `,$imageSizeXInput
+				),
 			),
-		),
-		makeDiv('input-group')(
-			makeLabel()(
-				`Image height `,$imageSizeYInput
+			makeDiv('input-group')(
+				makeLabel()(
+					`Image height `,$imageSizeYInput
+				)
 			)
 		),
-		makeDiv('input-group')(
-			makeLabel()(
-				`Marker width `,$markerSizeXInput
+		makeDiv('input-group','double')(
+			makeDiv('input-group')(
+				makeLabel()(
+					`Marker width `,$markerSizeXInput
+				),
 			),
-		),
-		makeDiv('input-group')(
-			makeLabel()(
-				`Marker height `,$markerSizeYInput
+			makeDiv('input-group')(
+				makeLabel()(
+					`Marker height `,$markerSizeYInput
+				)
 			)
 		),
 		makeDiv('input-group')(

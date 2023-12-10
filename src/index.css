@@ -8,9 +8,8 @@
 	border: var(--frame);
 	border-radius: .5rem;
 	display: flex;
-	flex-direction: column;
-	@media (width >= 768px) {
-		flex-direction: row;
+	@media (width < 768px) {
+		flex-direction: column;
 	}
 
 	> * {
@@ -27,6 +26,7 @@
 	}
 
 	.controls {
+		container-type: inline-size;
 		display: flex;
 		flex-direction: column;
 		gap: .5rem;
@@ -35,6 +35,18 @@
 			display: block;
 			box-sizing: border-box;
 			width: 100%;
+		}
+
+		.input-group.double {
+			display: flex;
+			gap: inherit;
+			@container (width < 300px) {
+				flex-direction: column;
+			}
+
+			> * {
+				flex: 1;
+			}
 		}
 	}
 
