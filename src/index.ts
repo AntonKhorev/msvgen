@@ -21,13 +21,18 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 	const $imageSizeYInput=makeNumberInput(32)
 	const $markerSizeXInput=makeNumberInput(22)
 	const $markerSizeYInput=makeNumberInput(32)
+	const $strokeWidthInput=makeNumberInput(1)
+	const $innerStrokeWidthInput=makeNumberInput(0,0)
 	const $holeSelect=makeElement('select')()(
 		new Option('none'),
 		new Option('round')
 	)
-	const $strokeWidthInput=makeNumberInput(1)
-	const $innerStrokeWidthInput=makeNumberInput(0,0)
-	const $fillSelect=makeElement('select')()(
+	const $markerFillSelect=makeElement('select')()(
+		new Option('none'),
+		new Option('canvas'),
+		new Option('currentColor')
+	)
+	const $holeFillSelect=makeElement('select')()(
 		new Option('none'),
 		new Option('canvas')
 	)
@@ -36,21 +41,25 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
 			$strokeWidthInput,$innerStrokeWidthInput,
-			$holeSelect,$fillSelect
+			$holeSelect,
+			$markerFillSelect,$holeFillSelect
 	]
 	const n=($input:HTMLInputElement)=>Number($input.value)
-	const render=()=>{
+	const update=()=>{
+		$holeFillSelect.disabled=$holeSelect.value=='none'
+
 		const marker=new Marker(
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
 			n($strokeWidthInput),n($innerStrokeWidthInput),
-			$holeSelect.value,$fillSelect.value
+			$holeSelect.value,
+			$markerFillSelect.value,$holeFillSelect.value
 		)
 		preview.marker=marker
 		output.render(marker)
 	}
 	for (const $input of $inputs) {
-		$input.oninput=render
+		$input.oninput=update
 	}
 
 	const $osmPresetLink=makeLink("OpenStreetMap preset", "https://github.com/openstreetmap/openstreetmap-website")
@@ -60,11 +69,13 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 		$imageSizeYInput.value='40'; $markerSizeYInput.value='40'
 		$strokeWidthInput.value='1'
 		$innerStrokeWidthInput.value='1'
-		$fillSelect.value='canvas'
-		render()
+		$holeSelect.value='round'
+		$markerFillSelect.value='currentColor'
+		$holeFillSelect.value='canvas'
+		update()
 	}
 
-	render()
+	update()
 
 	return makeDiv('controls')(
 		makeDiv('input-group','double')(
@@ -103,15 +114,20 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 				)
 			)
 		),
+		makeDiv('input-group')(
+			makeLabel()(
+				`Hole `,$holeSelect
+			)
+		),
 		makeDiv('input-group','double')(
 			makeDiv('input-group')(
 				makeLabel()(
-					`Hole `,$holeSelect
+					`Marker fill `,$markerFillSelect
 				)
 			),
 			makeDiv('input-group')(
 				makeLabel()(
-					`Fill `,$fillSelect
+					`Hole fill `,$holeFillSelect
 				)
 			)
 		),
