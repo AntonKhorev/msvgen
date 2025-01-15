@@ -1,7 +1,7 @@
 import Marker from './marker'
 import Preview from './preview'
 import Output from './output'
-import { makeElement, makeDiv, makeLabel } from './html'
+import { makeElement, makeDiv, makeLabel, makeLink } from './html'
 
 main()
 
@@ -27,6 +27,7 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 	)
 	const $strokeWidthInput=makeNumberInput(1)
 	const $fillCheckbox=makeCheckbox()
+
 	const $inputs=[
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
@@ -49,7 +50,17 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 	for (const $input of $inputs) {
 		$input.oninput=render
 	}
+
+	const $osmPresetLink=makeLink("OpenStreetMap preset", "https://github.com/openstreetmap/openstreetmap-website")
+	$osmPresetLink.onclick=(ev)=>{
+		ev.preventDefault()
+		$imageSizeXInput.value='25'; $markerSizeXInput.value='24'
+		$imageSizeYInput.value='40'; $markerSizeYInput.value='39'
+		render()
+	}
+
 	render()
+
 	return makeDiv('controls')(
 		makeDiv('input-group','double')(
 			makeDiv('input-group')(
@@ -89,6 +100,9 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 			makeLabel()(
 				$fillCheckbox,` Fill`
 			)
+		),
+		makeDiv('input-group')(
+			$osmPresetLink
 		)
 	)
 }

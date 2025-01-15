@@ -9,3 +9,10 @@ export function makeElement<K extends keyof HTMLElementTagNameMap>(tag: K): ((..
 
 export const makeDiv=makeElement('div')
 export const makeLabel=makeElement('label')
+
+export function makeLink(text: string, href: string): HTMLAnchorElement {
+	const $link=document.createElement('a')
+	$link.textContent=text
+	$link.href=href
+	return $link
+}
