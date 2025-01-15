@@ -29,16 +29,18 @@
 		}
 	}
 
-	.controls {
+	.controls, .preview {
 		container-type: inline-size;
 		display: flex;
 		flex-direction: column;
 		gap: .5rem;
 
-		.input-group input[type="number"] {
-			display: block;
-			box-sizing: border-box;
-			width: 100%;
+		.input-group {
+			input[type="number"], input[type="color"] {
+				display: block;
+				box-sizing: border-box;
+				width: 100%;
+			}
 		}
 
 		.input-group.double {
@@ -52,22 +54,23 @@
 				flex: 1;
 			}
 		}
-	}
 
-	.preview {
-		display: grid;
-		place-items: center;
+		.box {
+			flex-grow: 1;
+			display: grid;
+			place-items: center;
 
-		svg {
-			border: var(--frame);
-			background-image: conic-gradient(
-				#8880,
-				#8880 .25turn, #8882 .25turn,
-				#8882 .50turn, #8880 .50turn,
-				#8880 .75turn, #8882 .75turn,
-				#8882
-			);
-			background-size: 16px 16px;
+			svg {
+				border: var(--frame);
+				background-image: conic-gradient(
+					#8880,
+					#8880 .25turn, #8882 .25turn,
+					#8882 .50turn, #8880 .50turn,
+					#8880 .75turn, #8882 .75turn,
+					#8882
+				);
+				background-size: 16px 16px;
+			}
 		}
 	}
 }

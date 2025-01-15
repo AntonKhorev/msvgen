@@ -1,10 +1,31 @@
 import Marker from './marker'
-import { makeDiv } from './html'
+import { makeElement, makeDiv, makeLabel } from './html'
 
 export default class Preview {
-	$widget=makeDiv('preview')()
+	private $box=makeDiv('box')()
+	$widget=makeDiv('preview')(this.$box)
+
+	constructor() {
+		const $colorInput=makeColorInput()
+		$colorInput.oninput=()=>{
+			this.$box.style.color=$colorInput.value
+		}
+		this.$widget.append(
+			makeDiv('input-group')(
+				makeLabel()(
+					`currentColor `,$colorInput
+				)
+			)
+		)
+	}
 
 	render(marker: Marker): void {
-		this.$widget.innerHTML=marker.svg
+		this.$box.innerHTML=marker.svg
 	}
+}
+
+function makeColorInput(): HTMLInputElement {
+	const $input=makeElement('input')()()
+	$input.type='color'
+	return $input
 }
