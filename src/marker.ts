@@ -5,9 +5,8 @@ export default class Marker {
 	constructor(
 		private imageSizeX: number, private imageSizeY: number,
 		markerSizeX: number, markerSizeY: number,
-		hole: string,
 		strokeWidth: number,
-		fill: string
+		hole: string, fill: string
 	) {
 		const viewBoxMinX=-imageSizeX/2
 		const viewBoxMinY=-(imageSizeY-markerSizeY-strokeWidth/2)-markerSizeX/2

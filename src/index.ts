@@ -35,18 +35,16 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 	const $inputs=[
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
-			$holeSelect,
 			$strokeWidthInput,
-			$fillSelect
+			$holeSelect,$fillSelect
 	]
 	const n=$input=>Number($input.value)
 	const render=()=>{
 		const marker=new Marker(
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
-			$holeSelect.value,
 			n($strokeWidthInput),
-			$fillSelect.value
+			$holeSelect.value,$fillSelect.value
 		)
 		preview.render(marker)
 		output.render(marker)
@@ -94,17 +92,19 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 		),
 		makeDiv('input-group')(
 			makeLabel()(
-				`Hole `,$holeSelect
-			)
-		),
-		makeDiv('input-group')(
-			makeLabel()(
 				`Stroke width `,$strokeWidthInput
 			)
 		),
-		makeDiv('input-group')(
-			makeLabel()(
-				`Fill `,$fillSelect
+		makeDiv('input-group','double')(
+			makeDiv('input-group')(
+				makeLabel()(
+					`Hole `,$holeSelect
+				)
+			),
+			makeDiv('input-group')(
+				makeLabel()(
+					`Fill `,$fillSelect
+				)
 			)
 		),
 		makeDiv('input-group')(
