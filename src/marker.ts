@@ -18,32 +18,29 @@ export default class Marker {
 		this.content=``
 		if (innerStrokeWidth==0) {
 			if (markerFill=='none' || markerFill=='canvas') {
+				this.content+=generateCombinedPathElement(
+					markerSizeY,markerSizeX/2,strokeWidth/2,
+					holeFill=='canvas'?'none':hole,
+					markerFill,1,
+					strokeWidth,1
+				)
 				if (holeFill=='canvas') {
-					this.content+=generateCombinedPathElement(
-						markerSizeY,markerSizeX/2,strokeWidth/2,'none',
-						markerFill,1,
-						strokeWidth,1
-					)
 					this.content+=generateHolePathElement(
 						strokeWidth/2,
 						markerFill=='canvas'?'none':holeFill,
 						strokeWidth
 					)
-				} else {
-					this.content+=generateCombinedPathElement(
-						markerSizeY,markerSizeX/2,strokeWidth/2,hole,
-						markerFill,1,
-						strokeWidth,1
-					)
 				}
 			} else {
 				this.content+=generateCombinedPathElement(
-					markerSizeY,markerSizeX/2,0,holeFill=='canvas'?'none':hole,
+					markerSizeY,markerSizeX/2,0,
+					holeFill=='canvas'?'none':hole,
 					'canvas',1,
 					0,1
 				)
 				this.content+=generateCombinedPathElement(
-					markerSizeY,markerSizeX/2,strokeWidth/2,hole,
+					markerSizeY,markerSizeX/2,strokeWidth/2,
+					hole,
 					markerFill,.75,
 					strokeWidth,1
 				)
@@ -59,7 +56,8 @@ export default class Marker {
 				}
 				if (markerFill=='canvas' && holeFill=='canvas') {
 					this.content+=generateCombinedPathElement(
-						markerSizeY,markerSizeX/2,strokeWidth/2,'none',
+						markerSizeY,markerSizeX/2,strokeWidth/2,
+						'none',
 						markerFill,1,
 						strokeWidth,1
 					)
@@ -70,42 +68,41 @@ export default class Marker {
 					)
 				} else {
 					this.content+=generateCombinedPathElement(
-						markerSizeY,markerSizeX/2,strokeWidth/2,hole,
+						markerSizeY,markerSizeX/2,strokeWidth/2,
+						hole,
 						markerFill,1,
 						strokeWidth,1
 					)
 				}
 				this.content+=generateCombinedPathElement(
-					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth/2,hole,
+					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth/2,
+					hole,
 					'none',1,
 					innerStrokeWidth,.5
 				)
 			} else {
+				this.content+=generateCombinedPathElement(
+					markerSizeY,markerSizeX/2,strokeWidth/2,
+					holeFill=='canvas'?'none':hole,
+					'canvas',1,
+					strokeWidth,1
+				)
 				if (holeFill=='canvas') {
-					this.content+=generateCombinedPathElement(
-						markerSizeY,markerSizeX/2,strokeWidth/2,'none',
-						holeFill,1,
-						strokeWidth,1
-					)
 					this.content+=generateHolePathElement(
 						strokeWidth/2,
 						'none',
 						strokeWidth
 					)
-				} else {
-					this.content+=generateCombinedPathElement(
-						markerSizeY,markerSizeX/2,strokeWidth/2,hole,
-						'canvas',1,
-						strokeWidth,1
-					)
 				}
 				this.content+=generateCombinedPathElement(
-					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth/2,hole,
+					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth/2,
+					hole,
 					'none',1,
 					innerStrokeWidth,.5
 				)
 				this.content+=generateCombinedPathElement(
-					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth,hole,
+					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth,
+					hole,
 					markerFill,.75,
 					0,1
 				)
