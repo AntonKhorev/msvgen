@@ -81,7 +81,7 @@ function makeRangeDataList(id: string, maxValue: number): HTMLDataListElement {
 	const $dataList=makeElement('datalist')()()
 	$dataList.id=id
 	for (let value=1;value<=maxValue;value++) {
-		$dataList.append(new Option(String(value)))
+		$dataList.append(new Option('×'+String(value),String(value)))
 	}
 	return $dataList
 }
