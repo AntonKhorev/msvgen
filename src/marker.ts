@@ -68,18 +68,15 @@ function computeOutlinePathCommands(h: number, r: number, s=0): string {
 	const xs=x*(1-s/r)
 	const ys=y*(1-s/r)
 
-	const rf=rs.toFixed(2)
-	const pf=ps.toFixed(2)
-	const xf=xs.toFixed(2)
-	const yf=ys.toFixed(2)
-
-	return `M0,${pf} L${xf},${yf} A${rf},${rf} 0 1 0 -${xf},${yf} Z`
+	return `M0,${f(ps)} L${f(xs)},${f(ys)} A${f(rs)},${f(rs)} 0 1 0 -${f(xs)},${f(ys)} Z`
 }
 
 function computeHolePathCommands(r: number, s=0): string {
 	const rs=r+s
 
-	const rf=rs.toFixed(2)
+	return `M-${f(rs)},0 A${f(rs)},${f(rs)} 0 0 1 ${f(rs)},0 A${f(rs)},${f(rs)} 0 0 1 -${f(rs)},0`
+}
 
-	return `M-${rf},0 A${rf},${rf} 0 0 1 ${rf},0 A${rf},${rf} 0 0 1 -${rf},0`
+function f(x: number): string {
+	return x.toFixed(2).replace(/(\.\d*?)0+$/,(_,fr)=>fr=='.'?'':fr)
 }
