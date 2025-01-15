@@ -6,11 +6,22 @@ export default class Preview {
 	$widget=makeDiv('preview')(this.$box)
 
 	constructor() {
+		const $defineColorCheckbox=makeCheckbox()
 		const $colorInput=makeColorInput()
-		$colorInput.oninput=()=>{
-			this.$box.style.color=$colorInput.value
+		$defineColorCheckbox.oninput=$colorInput.oninput=()=>{
+			$colorInput.disabled=!$defineColorCheckbox.checked
+			if ($defineColorCheckbox.checked) {
+				this.$box.style.color=$colorInput.value
+			} else {
+				this.$box.style.removeProperty('color')
+			}
 		}
 		this.$widget.append(
+			makeDiv('input-group')(
+				makeLabel()(
+					$defineColorCheckbox,` Define colors`
+				)
+			),
 			makeDiv('input-group')(
 				makeLabel()(
 					`currentColor `,$colorInput
@@ -24,8 +35,15 @@ export default class Preview {
 	}
 }
 
+function makeCheckbox(): HTMLInputElement {
+	const $checkbox=makeElement('input')()()
+	$checkbox.type='checkbox'
+	return $checkbox
+}
+
 function makeColorInput(): HTMLInputElement {
 	const $input=makeElement('input')()()
 	$input.type='color'
+	$input.disabled=true
 	return $input
 }
