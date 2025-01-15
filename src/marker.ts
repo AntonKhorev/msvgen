@@ -31,9 +31,9 @@ export default class Marker {
 		this.content+=`/>\n`
 	}
 
-	get svg(): string {
+	getSvg(scale=1): string {
 		return (
-			`<svg width="${this.imageSizeX}" height="${this.imageSizeY}" viewBox="${this.viewBox}">\n`+
+			`<svg width="${this.imageSizeX*scale}" height="${this.imageSizeY*scale}" viewBox="${this.viewBox}">\n`+
 			this.content+
 			`</svg>`
 		)

@@ -38,7 +38,7 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 			$strokeWidthInput,
 			$holeSelect,$fillSelect
 	]
-	const n=$input=>Number($input.value)
+	const n=($input:HTMLInputElement)=>Number($input.value)
 	const render=()=>{
 		const marker=new Marker(
 			n($imageSizeXInput),n($imageSizeYInput),
@@ -46,7 +46,7 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 			n($strokeWidthInput),
 			$holeSelect.value,$fillSelect.value
 		)
-		preview.render(marker)
+		preview.marker=marker
 		output.render(marker)
 	}
 	for (const $input of $inputs) {

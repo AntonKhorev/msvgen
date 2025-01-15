@@ -9,6 +9,6 @@ export default class Output {
 	)
 
 	render(marker: Marker): void {
-		this.$code.textContent=marker.svg
+		this.$code.textContent=marker.getSvg()
 	}
 }

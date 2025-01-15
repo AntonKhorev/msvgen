@@ -40,7 +40,7 @@
 				opacity: .5;
 			}
 
-			input[type="number"], input[type="color"] {
+			input[type="number"], input[type="color"], input[type="range"] {
 				display: block;
 				box-sizing: border-box;
 				width: 100%;
