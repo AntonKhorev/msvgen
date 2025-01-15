@@ -5,7 +5,7 @@ export default class Preview {
 	#marker?: Marker
 
 	private $box=makeDiv('box')()
-	private $zoomInput=makeRangeInput('zoom-data-list',10)
+	private $zoomInput=makeRangeInput('zoom-data-list',8,10)
 	$widget=makeDiv('preview')()
 
 	constructor() {
@@ -67,12 +67,13 @@ function makeColorInput(): HTMLInputElement {
 	return $input
 }
 
-function makeRangeInput(dataListId: string, maxValue: number): HTMLInputElement {
+function makeRangeInput(dataListId: string, value: number, maxValue: number): HTMLInputElement {
 	const $input=makeElement('input')()()
 	$input.type='range'
-	$input.value=$input.min='1'
+	$input.min='1'
 	$input.max=String(maxValue)
 	$input.step='1'
+	$input.value=String(value)
 	$input.setAttribute('list',dataListId)
 	return $input
 }
