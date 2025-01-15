@@ -19,23 +19,23 @@ function main() {
 function makeControls(preview: Preview, output: Output): HTMLElement {
 	const $imageSizeXInput=makeNumberInput(32)
 	const $imageSizeYInput=makeNumberInput(32)
-	const $markerSizeXInput=makeNumberInput(21)
-	const $markerSizeYInput=makeNumberInput(31)
+	const $markerSizeXInput=makeNumberInput(22)
+	const $markerSizeYInput=makeNumberInput(32)
 	const $holeSelect=makeElement('select')()(
 		new Option('none'),
 		new Option('round')
 	)
 	const $strokeWidthInput=makeNumberInput(1)
+	const $innerStrokeWidthInput=makeNumberInput(0,0)
 	const $fillSelect=makeElement('select')()(
 		new Option('none'),
-		new Option('inside'),
-		new Option('semi-inside')
+		new Option('canvas')
 	)
 
 	const $inputs=[
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
-			$strokeWidthInput,
+			$strokeWidthInput,$innerStrokeWidthInput,
 			$holeSelect,$fillSelect
 	]
 	const n=($input:HTMLInputElement)=>Number($input.value)
@@ -43,7 +43,7 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 		const marker=new Marker(
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
-			n($strokeWidthInput),
+			n($strokeWidthInput),n($innerStrokeWidthInput),
 			$holeSelect.value,$fillSelect.value
 		)
 		preview.marker=marker
@@ -56,10 +56,11 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 	const $osmPresetLink=makeLink("OpenStreetMap preset", "https://github.com/openstreetmap/openstreetmap-website")
 	$osmPresetLink.onclick=(ev)=>{
 		ev.preventDefault()
-		$imageSizeXInput.value='25'; $markerSizeXInput.value='23'
-		$imageSizeYInput.value='40'; $markerSizeYInput.value='38'
-		$strokeWidthInput.value='2'
-		$fillSelect.value='semi-inside'
+		$imageSizeXInput.value='25'; $markerSizeXInput.value='25'
+		$imageSizeYInput.value='40'; $markerSizeYInput.value='40'
+		$strokeWidthInput.value='1'
+		$innerStrokeWidthInput.value='1'
+		$fillSelect.value='canvas'
 		render()
 	}
 
@@ -90,9 +91,16 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 				)
 			)
 		),
-		makeDiv('input-group')(
-			makeLabel()(
-				`Stroke width `,$strokeWidthInput
+		makeDiv('input-group','double')(
+			makeDiv('input-group')(
+				makeLabel()(
+					`Stroke width `,$strokeWidthInput
+				)
+			),
+			makeDiv('input-group')(
+				makeLabel()(
+					`Inner stroke width `,$innerStrokeWidthInput
+				)
 			)
 		),
 		makeDiv('input-group','double')(
@@ -113,10 +121,10 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 	)
 }
 
-function makeNumberInput(value: number): HTMLInputElement {
+function makeNumberInput(value: number, minValue=1): HTMLInputElement {
 	const $input=makeElement('input')()()
 	$input.type='number'
-	$input.min='1'
+	$input.min=String(minValue)
 	$input.value=String(value)
 	return $input
 }
