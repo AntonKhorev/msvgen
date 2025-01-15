@@ -7,7 +7,7 @@ export default class Marker {
 		markerSizeX: number, markerSizeY: number,
 		hole: string,
 		strokeWidth: number,
-		fill: boolean
+		fill: string
 	) {
 		const viewBoxMinX=-imageSizeX/2
 		const viewBoxMinY=-(imageSizeY-markerSizeY-strokeWidth/2)-markerSizeX/2
@@ -15,17 +15,27 @@ export default class Marker {
 
 		let path=computeOutlinePath(markerSizeY,markerSizeX/2)
 		if (hole=='round') path+=` `+computeHolePath(4)
-		this.content=`<path d="${path}"`
-		this.content+=` fill="${fill?'canvas':'none'}"`
+
+		this.content=``
+		if (fill=='semi-inside') {
+			this.content+=`<path d="${path}" fill="canvas"/>\n`
+		}
+		this.content+=`<path d="${path}"`
+		this.content+=` fill="${fill=='none'?'none':'canvas'}"`
+		if (fill=='semi-inside') {
+			this.content+=` fill-opacity=".5" paint-order="stroke"`
+		}
 		this.content+=` stroke="currentColor"`
-		if (strokeWidth!=1) this.content+=` stroke-width="${strokeWidth}"`
-		this.content+=`/>`
+		if (strokeWidth!=1) {
+			this.content+=` stroke-width="${strokeWidth}"`
+		}
+		this.content+=`/>\n`
 	}
 
 	get svg(): string {
 		return (
 			`<svg width="${this.imageSizeX}" height="${this.imageSizeY}" viewBox="${this.viewBox}">\n`+
-			this.content+`\n`+
+			this.content+
 			`</svg>`
 		)
 	}

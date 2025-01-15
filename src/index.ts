@@ -26,14 +26,18 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 		new Option('round')
 	)
 	const $strokeWidthInput=makeNumberInput(1)
-	const $fillCheckbox=makeCheckbox()
+	const $fillSelect=makeElement('select')()(
+		new Option('none'),
+		new Option('inside'),
+		new Option('semi-inside')
+	)
 
 	const $inputs=[
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
 			$holeSelect,
 			$strokeWidthInput,
-			$fillCheckbox
+			$fillSelect
 	]
 	const n=$input=>Number($input.value)
 	const render=()=>{
@@ -42,7 +46,7 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 			n($markerSizeXInput),n($markerSizeYInput),
 			$holeSelect.value,
 			n($strokeWidthInput),
-			$fillCheckbox.checked
+			$fillSelect.value
 		)
 		preview.render(marker)
 		output.render(marker)
@@ -54,8 +58,10 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 	const $osmPresetLink=makeLink("OpenStreetMap preset", "https://github.com/openstreetmap/openstreetmap-website")
 	$osmPresetLink.onclick=(ev)=>{
 		ev.preventDefault()
-		$imageSizeXInput.value='25'; $markerSizeXInput.value='24'
-		$imageSizeYInput.value='40'; $markerSizeYInput.value='39'
+		$imageSizeXInput.value='25'; $markerSizeXInput.value='23'
+		$imageSizeYInput.value='40'; $markerSizeYInput.value='38'
+		$strokeWidthInput.value='2'
+		$fillSelect.value='semi-inside'
 		render()
 	}
 
@@ -98,7 +104,7 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 		),
 		makeDiv('input-group')(
 			makeLabel()(
-				$fillCheckbox,` Fill`
+				`Fill `,$fillSelect
 			)
 		),
 		makeDiv('input-group')(
@@ -113,10 +119,4 @@ function makeNumberInput(value: number): HTMLInputElement {
 	$input.min='1'
 	$input.value=String(value)
 	return $input
-}
-
-function makeCheckbox(): HTMLInputElement {
-	const $checkbox=makeElement('input')()()
-	$checkbox.type='checkbox'
-	return $checkbox
 }
