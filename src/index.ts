@@ -36,19 +36,25 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 		new Option('none'),
 		new Option('canvas')
 	)
+	const $coordinatesCenterSelect=makeElement('select')()(
+		new Option('hole'),
+		new Option('image')
+	)
 
 	const $inputs=[
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
 			$strokeWidthInput,$innerStrokeWidthInput,
 			$holeSelect,
-			$markerFillSelect,$holeFillSelect
+			$markerFillSelect,$holeFillSelect,
+			$coordinatesCenterSelect
 	]
 	const n=($input:HTMLInputElement)=>Number($input.value)
 	const update=()=>{
 		$holeFillSelect.disabled=$holeSelect.value=='none'
 
 		const marker=new Marker(
+			$coordinatesCenterSelect.value,
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
 			n($strokeWidthInput),n($innerStrokeWidthInput),
@@ -129,6 +135,11 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 				makeLabel()(
 					`Hole fill `,$holeFillSelect
 				)
+			)
+		),
+		makeDiv('input-group')(
+			makeLabel()(
+				`Coordinates centered at `,$coordinatesCenterSelect
 			)
 		),
 		makeDiv('input-group')(
