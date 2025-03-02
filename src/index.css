@@ -104,7 +104,7 @@ details {
 	.explanation {
 		display: flex;
 		flex-wrap: wrap;
-		gap: .5rem;
+		gap: 1rem;
 		margin-top: 1rem;
 
 		> figure {

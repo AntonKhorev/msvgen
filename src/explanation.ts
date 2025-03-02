@@ -15,8 +15,11 @@ export default class Explanation {
 		const sx=250
 		const sy=350
 
-		const pad0=28.5
+		const pad0=32.5
 		const pad1=4.5
+		const textGap=4
+		const outerGap=16
+		const outerOvershoot=8
 
 		const h=sy
 		const r=sx/2
@@ -36,14 +39,14 @@ export default class Explanation {
 				<line y1="-8" y2="8" />
 				<g stroke-dasharray="2">
 					<circle r="${f(r)}" />
-					<line x1="${f(-r)}" x2="${f(-r)}" y1="${f(-r-16)}" />
-					<line x1="${f(r)}" x2="${f(r)}" y1="${f(-r-16)}" />
-					<line x1="${f(-r-16)}" y1="${f(-r)}" y2="${f(-r)}" />
-					<line x1="${f(-r-16)}" y1="${f(p)}" y2="${f(p)}" />
+					<line x1="${f(-r)}" x2="${f(-r)}" y1="${f(-r-outerGap-outerOvershoot)}" />
+					<line x1="${f(r)}" x2="${f(r)}" y1="${f(-r-outerGap-outerOvershoot)}" />
+					<line x1="${f(-r-outerGap-outerOvershoot)}" y1="${f(-r)}" y2="${f(-r)}" />
+					<line x1="${f(-r-outerGap-outerOvershoot)}" y1="${f(p)}" y2="${f(p)}" />
 				</g>
 				<g marker-start="url(#arrow-head)" marker-end="url(#arrow-head)">
-					<line x1="${f(-r)}" x2="${f(r)}" y1="${f(-r-8)}" y2="${f(-r-8)}" />
-					<line x1="${f(-r-8)}" x2="${f(-r-8)}" y1="${f(-r)}" y2="${f(p)}" />
+					<line x1="${f(-r)}" x2="${f(r)}" y1="${f(-r-outerGap)}" y2="${f(-r-outerGap)}" />
+					<line x1="${f(-r-outerGap)}" x2="${f(-r-outerGap)}" y1="${f(-r)}" y2="${f(p)}" />
 					<line y1="${f(-r)}" />
 					<line y2="${f(p)}" />
 					<line x2="${f(x)}" y2="${f(y)}" />
@@ -52,13 +55,13 @@ export default class Explanation {
 				</g>
 			</g>
 			<g fill="currentColor">
-				<text y="${f(-r-12)}" text-anchor="middle">w</text>
-				<text x="${f(-r-12)}" y="${f((p-r)/2)}" text-anchor="end" dominant-baseline="middle">h</text>
-				<text x="-4" y="${f(-r/2)}" text-anchor="end" dominant-baseline="middle">r</text>
-				<text x="-4" y="${f(p/2)}" text-anchor="end" dominant-baseline="middle">p</text>
+				<text y="${f(-r-outerGap-textGap)}" text-anchor="middle">w</text>
+				<text x="${f(-r-outerGap-textGap)}" y="${f((p-r)/2)}" text-anchor="end" dominant-baseline="middle">h</text>
+				<text x="${f(-textGap)}" y="${f(-r/2)}" text-anchor="end" dominant-baseline="middle">r</text>
+				<text x="${f(-textGap)}" y="${f(p/2)}" text-anchor="end" dominant-baseline="middle">p</text>
 				<text x="${f(x/2)}" y="${f(y/2)}" text-anchor="middle"dominant-baseline="text-before-edge">r</text>
-				<text x="${f(x/2)}" y="-4" text-anchor="middle">x</text>
-				<text x="${f(x+4)}" y="${f(y/2)}" dominant-baseline="middle">y</text>
+				<text x="${f(x/2)}" y="${f(-textGap)}" text-anchor="middle">x</text>
+				<text x="${f(x+textGap)}" y="${f(y/2)}" dominant-baseline="middle">y</text>
 			</g>
 		</svg>`
 
