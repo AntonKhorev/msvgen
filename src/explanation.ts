@@ -20,6 +20,10 @@ export default class Explanation {
 		const textGap=4
 		const outerGap=16
 		const outerOvershoot=8
+		// angles:
+		const a=24
+		const b=1.25
+		const q=16
 
 		const h=sy
 		const r=sx/2
@@ -52,6 +56,16 @@ export default class Explanation {
 					<line x2="${f(x)}" y2="${f(y)}" />
 					<line x2="${f(x)}" />
 					<line x1="${f(x)}" x2="${f(x)}" y2="${f(y)}" />
+				</g>
+				<g opacity=".5">
+					<path d="M${f(x-q)},${f(0)} v${f(q)} h${f(q)}" />
+					<path d="M${f(x-q*x/r)},${f(y-q*y/r)} l${f(-q*y/r)},${f(q*x/r)} l${f(q*x/r)},${f(q*y/r)}" />
+					<path d="M${f(a)},${f(0)} A${f(a)},${f(a)} 0 0 1 ${f(a*x/r)},${f(a*y/r)}" />
+					<path d="M${f(0)},${f(p-a)} A${f(a)},${f(a)} 0 0 1 ${f(a*y/r)},${f(p-a*x/r)}" />
+					<path d="M${f(0)},${f(a-b)} A${f(a-b)},${f(a-b)} 0 0 0 ${f((a-b)*x/r)},${f((a-b)*y/r)}" />
+					<path d="M${f(0)},${f(a+b)} A${f(a+b)},${f(a+b)} 0 0 0 ${f((a+b)*x/r)},${f((a+b)*y/r)}" />
+					<path d="M${f(x)},${f(y-(a-b))} A${f(a-b)},${f(a-b)} 0 0 0 ${f(x-(a-b)*x/r)},${f(y-(a-b)*y/r)}" />
+					<path d="M${f(x)},${f(y-(a+b))} A${f(a+b)},${f(a+b)} 0 0 0 ${f(x-(a+b)*x/r)},${f(y-(a+b)*y/r)}" />
 				</g>
 			</g>
 			<g fill="currentColor">
