@@ -31,7 +31,7 @@ export default class Explanation {
 				</marker>
 			</defs>
 			<g fill="none" stroke="currentColor">
-				<path d="${computeOutlinePathCommands(f,f,sy,r)}" stroke-width="2" />
+				<path d="M${f(0)},${f(p)} L${f(x)},${f(y)} A${f(r)},${f(r)} 0 1 0 ${f(-x)},${f(y)} Z" stroke-width="2" />
 				<line x1="-8" x2="8" />
 				<line y1="-8" y2="8" />
 				<g stroke-dasharray="2">
@@ -64,22 +64,6 @@ export default class Explanation {
 
 		this.$math.replaceChildren(`TBD`)
 	}
-}
-
-// TODO remove copypaste
-type n2s = (z:number)=>string
-
-function computeOutlinePathCommands(fx: n2s, fy: n2s, h: number, r: number, s=0): string {
-	const p=h-r
-	const y=r**2/p
-	const x=Math.sqrt(r**2-y**2)
-
-	const rs=r-s
-	const ps=p*(1-s/r)
-	const xs=x*(1-s/r)
-	const ys=y*(1-s/r)
-
-	return `M${fx(0)},${fy(ps)} L${fx(xs)},${fy(ys)} A${f(rs)},${f(rs)} 0 1 0 ${fx(-xs)},${fy(ys)} Z`
 }
 
 function f(x: number): string {
