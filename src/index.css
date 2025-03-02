@@ -91,6 +91,7 @@
 }
 
 details {
+	container-type: inline-size;
 	margin-top: .5rem;
 	padding: 1rem;
 
@@ -98,5 +99,21 @@ details {
 		overflow-x: scroll;
 		padding: .5rem;
 		background: #8884;
+	}
+
+	.explanation {
+		display: flex;
+		flex-wrap: wrap;
+		gap: .5rem;
+		margin-top: 1rem;
+
+		> figure {
+			margin: 0;
+		}
+
+		> .math {
+			flex-grow: 1;
+			min-width: 20em;
+		}
 	}
 }

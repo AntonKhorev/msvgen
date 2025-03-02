@@ -1,6 +1,7 @@
 import Marker from './marker'
 import Preview from './preview'
 import Output from './output'
+import Explanation from './explanation'
 import { makeElement, makeDiv, makeLabel, makeLink } from './html'
 
 main()
@@ -8,12 +9,16 @@ main()
 function main() {
 	const preview=new Preview
 	const output=new Output
+	const explanation=new Explanation
 	const $panel=makeDiv('panel')(
 		makeControls(preview,output),preview.$widget
 	)
 	document.body.append(
-		$panel,output.$widget
+		$panel,
+		output.$widget,
+		explanation.$widget
 	)
+	explanation.render()
 }
 
 function makeControls(preview: Preview, output: Output): HTMLElement {
