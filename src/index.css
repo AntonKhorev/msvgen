@@ -109,11 +109,14 @@ details {
 
 		> figure {
 			margin: 0;
+			font-style: italic;
 		}
 
 		> .math {
 			flex-grow: 1;
-			min-width: 20em;
+			display: flex;
+			flex-direction: column;
+			gap: 1em;
 		}
 	}
 }

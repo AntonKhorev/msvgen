@@ -65,7 +65,21 @@ export default class Explanation {
 			</g>
 		</svg>`
 
-		this.$math.replaceChildren(`TBD`)
+		this.$math.innerHTML=`<math display="block">
+			<mi>r</mi> <mo>=</mo> <mfrac><mi>w</mi><mn>2</mn></mfrac>
+		</math><math display="block">
+			<mi>p</mi> <mo>=</mo> <mi>h</mi> <mo>-</mo> <mi>r</mi>
+		</math><math display="block">
+			<mfrac><mi>y</mi><mi>r</mi></mfrac> <mo>=</mo> <mfrac><mi>r</mi><mi>p</mi></mfrac>
+		</math><math display="block">
+			<mi>y</mi> <mo>=</mo> <mfrac><msup><mi>r</mi><mn>2</mn></msup><mi>p</mi></mfrac>
+		</math><math display="block">
+			<msup><mi>x</mi><mn>2</mn></msup> <mo>+</mo> <msup><mi>y</mi><mn>2</mn></msup> <mo>=</mo> <msup><mi>r</mi><mn>2</mn></msup>
+		</math><math display="block">
+			<msup><mi>x</mi><mn>2</mn></msup> <mo>=</mo> <msup><mi>r</mi><mn>2</mn></msup> <mo>-</mo> <msup><mi>y</mi><mn>2</mn></msup>
+		</math><math display="block">
+			<mi>x</mi> <mo>=</mo> <msqrt><msup><mi>r</mi><mn>2</mn></msup> <mo>-</mo> <msup><mi>y</mi><mn>2</mn></msup></msqrt>
+		</math>`
 	}
 }
 
