@@ -28,19 +28,18 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 	const $markerSizeYInput=makeNumberInput(32)
 	const $strokeWidthInput=makeNumberInput(1)
 	const $innerStrokeWidthInput=makeNumberInput(0,0)
+	const $strokeColorSelect=makeColorSelect()
+	$strokeColorSelect.value='currentColor'
+	const $innerStrokeColorSelect=makeColorSelect()
+	$innerStrokeColorSelect.value='currentColor'
 	const $holeSelect=makeElement('select')()(
 		new Option('none'),
 		new Option('round')
 	)
-	const $markerFillSelect=makeElement('select')()(
-		new Option('none'),
-		new Option('canvas'),
-		new Option('currentColor')
-	)
-	const $holeFillSelect=makeElement('select')()(
-		new Option('none'),
-		new Option('canvas')
-	)
+	const $markerFillSelect=makeColorSelect()
+	const $holeFillSelect=makeColorSelect()
+	const $markerTintSelect=makeColorSelect()
+	const $holeTintSelect=makeColorSelect()
 	const $coordinatesCenterSelect=makeElement('select')()(
 		new Option('hole'),
 		new Option('image')
@@ -50,21 +49,25 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 			$imageSizeXInput,$imageSizeYInput,
 			$markerSizeXInput,$markerSizeYInput,
 			$strokeWidthInput,$innerStrokeWidthInput,
+			$strokeColorSelect,$innerStrokeColorSelect,
 			$holeSelect,
 			$markerFillSelect,$holeFillSelect,
+			$markerTintSelect,$holeTintSelect,
 			$coordinatesCenterSelect
 	]
 	const n=($input:HTMLInputElement)=>Number($input.value)
 	const update=()=>{
-		$holeFillSelect.disabled=$holeSelect.value=='none'
+		$holeFillSelect.disabled=$holeTintSelect.disabled=$holeSelect.value=='none'
 
 		const marker=new Marker(
 			$coordinatesCenterSelect.value,
 			n($imageSizeXInput),n($imageSizeYInput),
 			n($markerSizeXInput),n($markerSizeYInput),
 			n($strokeWidthInput),n($innerStrokeWidthInput),
+			$strokeColorSelect.value,$innerStrokeColorSelect.value,
 			$holeSelect.value,
-			$markerFillSelect.value,$holeFillSelect.value
+			$markerFillSelect.value,$holeFillSelect.value,
+			$markerTintSelect.value,$holeTintSelect.value
 		)
 		preview.marker=marker
 		output.render(marker)
@@ -80,9 +83,13 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 		$imageSizeYInput.value='40'; $markerSizeYInput.value='40'
 		$strokeWidthInput.value='1'
 		$innerStrokeWidthInput.value='1'
+		$strokeColorSelect.value='currentColor'
+		$innerStrokeColorSelect.value='white'
 		$holeSelect.value='round'
-		$markerFillSelect.value='currentColor'
-		$holeFillSelect.value='canvas'
+		$markerFillSelect.value='white'
+		$markerTintSelect.value='currentColor'
+		$holeFillSelect.value='white'
+		$holeTintSelect.value='none'
 		update()
 	}
 
@@ -125,9 +132,24 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 				)
 			)
 		),
-		makeDiv('input-group')(
-			makeLabel()(
-				`Hole `,$holeSelect
+		makeDiv('input-group','double')(
+			makeDiv('input-group')(
+				makeLabel()(
+					`Stroke `,$strokeColorSelect
+				)
+			),
+			makeDiv('input-group')(
+				makeLabel()(
+					`Inner stroke `,$innerStrokeColorSelect
+				)
+			)
+		),
+		makeDiv('input-group','double')(
+			makeDiv('input-group')(),
+			makeDiv('input-group')(
+				makeLabel()(
+					`Hole `,$holeSelect
+				)
 			)
 		),
 		makeDiv('input-group','double')(
@@ -139,6 +161,18 @@ function makeControls(preview: Preview, output: Output): HTMLElement {
 			makeDiv('input-group')(
 				makeLabel()(
 					`Hole fill `,$holeFillSelect
+				)
+			)
+		),
+		makeDiv('input-group','double')(
+			makeDiv('input-group')(
+				makeLabel()(
+					`Marker tint `,$markerTintSelect
+				)
+			),
+			makeDiv('input-group')(
+				makeLabel()(
+					`Hole tint `,$holeTintSelect
 				)
 			)
 		),
@@ -159,4 +193,15 @@ function makeNumberInput(value: number, minValue=1): HTMLInputElement {
 	$input.min=String(minValue)
 	$input.value=String(value)
 	return $input
+}
+
+function makeColorSelect(): HTMLSelectElement {
+	return makeElement('select')()(
+		new Option('none'),
+		new Option('canvas'),
+		new Option('currentColor'),
+		new Option('white'),
+		new Option('black'),
+		new Option('red')
+	)
 }

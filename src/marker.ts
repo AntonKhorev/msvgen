@@ -1,5 +1,11 @@
 type n2s = (z:number)=>string
 
+type shapePendingState = null | {
+	outline: true
+	fill?: string
+	tint?: string
+}
+
 export default class Marker {
 	private viewBox: string
 	private content: string
@@ -9,11 +15,28 @@ export default class Marker {
 		private imageSizeX: number, private imageSizeY: number,
 		markerSizeX: number, markerSizeY: number,
 		strokeWidth: number, innerStrokeWidth: number,
+		stroke: string, innerStroke: string,
 		hole: string,
-		markerFill: string, holeFill: string
+		markerFill: string, holeFill: string,
+		markerTint: string, holeTint: string
 	) {
-		if (hole=='none') holeFill='none'
+		const hasHole=hole!='none'
 
+		// set up pending states
+		let markerPendingState: shapePendingState = {outline: true}
+		{
+			if (markerFill!='none') markerPendingState.fill=markerFill
+			if (markerTint!='none') markerPendingState.tint=markerTint
+		}
+		
+		let holePendingState: shapePendingState = null
+		if (hasHole) {
+			holePendingState={outline: true}
+			if (holeFill!='none') holePendingState.fill=holeFill
+			if (holeTint!='none') holePendingState.tint=holeTint
+		}
+
+		// set up coordinates
 		const viewBoxMinX=-imageSizeX/2
 		const fx=f
 		let viewBoxMinY: number
@@ -32,98 +55,201 @@ export default class Marker {
 
 		this.viewBox=`${viewBoxMinX} ${viewBoxMinY} ${imageSizeX} ${imageSizeY}`
 
+		// render
 		this.content=``
-		if (innerStrokeWidth==0) {
-			if (markerFill=='none' || markerFill=='canvas') {
-				this.content+=generateCombinedPathElement(fx,fy,
-					markerSizeY,markerSizeX/2,strokeWidth/2,
-					holeFill=='canvas'?'none':hole,
-					markerFill,1,
-					strokeWidth,1
-				)
-				if (holeFill=='canvas') {
-					this.content+=generateHolePathElement(fx,fy,
-						strokeWidth/2,
-						markerFill=='canvas'?'none':holeFill,
-						strokeWidth
-					)
-				}
-			} else {
-				this.content+=generateCombinedPathElement(fx,fy,
-					markerSizeY,markerSizeX/2,0,
-					holeFill=='canvas'?'none':hole,
-					'canvas',1,
-					0,1
-				)
-				this.content+=generateCombinedPathElement(fx,fy,
-					markerSizeY,markerSizeX/2,strokeWidth/2,
-					hole,
-					markerFill,.75,
-					strokeWidth,1
-				)
+
+		// marker+hole fill
+		if (
+			markerPendingState && markerPendingState.fill && markerPendingState.tint && (
+				!hasHole ||
+				holePendingState && holePendingState.fill
+			)
+		) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				'none',
+				markerPendingState.fill,1,
+				stroke,0,1
+			)
+			if (holePendingState && markerPendingState.fill==holePendingState.fill) {
+				delete holePendingState.fill
 			}
-		} else {
-			if (markerFill=='none' || markerFill=='canvas') {
-				if (markerFill=='none' && holeFill=='canvas') {
-					this.content+=generateHolePathElement(fx,fy,
-						0,
-						holeFill,
-						0
-					)
-				}
-				if (markerFill=='canvas' && holeFill=='canvas') {
-					this.content+=generateCombinedPathElement(fx,fy,
-						markerSizeY,markerSizeX/2,strokeWidth/2,
-						'none',
-						markerFill,1,
-						strokeWidth,1
-					)
-					this.content+=generateHolePathElement(fx,fy,
-						strokeWidth/2,
-						'none',
-						strokeWidth
-					)
-				} else {
-					this.content+=generateCombinedPathElement(fx,fy,
-						markerSizeY,markerSizeX/2,strokeWidth/2,
-						hole,
-						markerFill,1,
-						strokeWidth,1
-					)
-				}
-				this.content+=generateCombinedPathElement(fx,fy,
-					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth/2,
-					hole,
-					'none',1,
-					innerStrokeWidth,.5
-				)
-			} else {
-				this.content+=generateCombinedPathElement(fx,fy,
-					markerSizeY,markerSizeX/2,strokeWidth/2,
-					holeFill=='canvas'?'none':hole,
-					'canvas',1,
-					strokeWidth,1
-				)
-				if (holeFill=='canvas') {
-					this.content+=generateHolePathElement(fx,fy,
-						strokeWidth/2,
-						'none',
-						strokeWidth
-					)
-				}
-				this.content+=generateCombinedPathElement(fx,fy,
-					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth/2,
-					hole,
-					'none',1,
-					innerStrokeWidth,.5
-				)
-				this.content+=generateCombinedPathElement(fx,fy,
-					markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth,
-					hole,
-					markerFill,.75,
-					0,1
-				)
+			delete markerPendingState.fill
+		}
+
+		// marker fill
+		if (
+			markerPendingState && markerPendingState.fill &&
+			holePendingState && markerPendingState.fill!=holePendingState.fill
+		) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				hole,
+				markerPendingState.fill,1,
+				stroke,0,1
+			)
+			delete markerPendingState.fill
+		}
+
+		// marker+hole fill, marker outline
+		if (
+			markerPendingState && markerPendingState.fill && !markerPendingState.tint && (
+				!hasHole ||
+				holePendingState && holePendingState.fill
+			)
+		) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				'none',
+				markerPendingState.fill,1,
+				stroke,strokeWidth,1
+			)
+			if (holePendingState && markerPendingState.fill==holePendingState.fill) {
+				delete holePendingState.fill
 			}
+			markerPendingState=null
+		}
+
+		// marker fill, marker+hole outline
+		if (
+			markerPendingState && markerPendingState.fill && !markerPendingState.tint &&
+			holePendingState && !holePendingState.fill && !holePendingState.tint
+		) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				hole,
+				markerPendingState.fill,1,
+				stroke,strokeWidth,1
+			)
+			holePendingState=null
+			markerPendingState=null
+		}
+
+		// hole fill
+		if (
+			holePendingState && holePendingState.fill && holePendingState.tint
+		) {
+			this.content+=generateHolePathElement(fx,fy,
+				strokeWidth/2,
+				holePendingState.fill,1,
+				stroke,0,1
+			)
+			delete holePendingState.fill
+		}
+
+		// hole fill+outline
+		if (
+			holePendingState && holePendingState.fill && !holePendingState.tint
+		) {
+			this.content+=generateHolePathElement(fx,fy,
+				strokeWidth/2,
+				holePendingState.fill,1,
+				stroke,strokeWidth,1
+			)
+			holePendingState=null
+		}
+
+		// should have cleared fills
+
+		// marker tint, marker+hole outline
+		if (
+			markerPendingState && markerPendingState.tint && (
+				!holePendingState || !holePendingState.tint
+			)
+		) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				hole,
+				markerPendingState.tint,.75,
+				stroke,strokeWidth,1
+			)
+			holePendingState=null
+			markerPendingState=null
+		}
+
+		// marker+hole tint, marker outline
+		if (
+			markerPendingState && markerPendingState.tint && 
+			holePendingState && holePendingState.tint && markerPendingState.tint==holePendingState.tint
+		) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				'none',
+				markerPendingState.tint,.75,
+				stroke,strokeWidth,1
+			)
+			delete holePendingState.tint
+			markerPendingState=null
+		}
+
+		// marker tint
+		// TODO: don't need this case if can run hole fill after it
+		if (
+			markerPendingState && markerPendingState.tint &&
+			holePendingState && holePendingState.tint
+		) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				hole,
+				markerPendingState.tint,.75,
+				stroke,0,1
+			)
+			delete markerPendingState.tint
+		}
+
+		// hole tint+outline
+		if (
+			holePendingState && holePendingState.tint
+		) {
+			this.content+=generateHolePathElement(fx,fy,
+				strokeWidth/2,
+				holePendingState.tint,.75,
+				stroke,strokeWidth,1
+			)
+			holePendingState=null
+		}
+
+		// should have cleared tints
+
+		if (markerPendingState && holePendingState) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				hole,
+				'none',1,
+				stroke,strokeWidth,1
+			)
+			holePendingState=null
+			markerPendingState=null
+		}
+
+		if (markerPendingState) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth/2,
+				'none',
+				'none',1,
+				stroke,strokeWidth,1
+			)
+			markerPendingState=null
+		}
+
+		if (holePendingState) {
+			this.content+=generateHolePathElement(fx,fy,
+				strokeWidth/2,
+				'none',1,
+				stroke,strokeWidth,1
+			)
+			holePendingState=null
+		}
+
+		// should have cleared outlines
+
+		if (innerStrokeWidth>0) {
+			this.content+=generateCombinedPathElement(fx,fy,
+				markerSizeY,markerSizeX/2,strokeWidth+innerStrokeWidth/2,
+				hole,
+				'none',1,
+				innerStroke,innerStrokeWidth,.5
+			)
 		}
 	}
 
@@ -141,7 +267,7 @@ function generateCombinedPathElement(
 	h: number, r: number, s: number,
 	hole: string,
 	fill: string, fillOpacity: number,
-	strokeWidth: number, strokeOpacity: number
+	stroke: string, strokeWidth: number, strokeOpacity: number
 ): string {
 	const holeRadius=4
 
@@ -150,19 +276,9 @@ function generateCombinedPathElement(
 		path+=` `+computeHolePathCommands(fx,fy,holeRadius,s)
 	}
 
-	let content=`<path d="${path}" fill="${fill}"`
-	if (fill!='none' && fillOpacity!=1) {
-		content+=` fill-opacity="${fillOpacity}"`
-	}
-	if (strokeWidth>0) {
-		content+=` stroke="currentColor"`
-		if (strokeWidth!=1) {
-			content+=` stroke-width="${strokeWidth}"`
-		}
-		if (strokeOpacity!=1) {
-			content+=` stroke-opacity="${strokeOpacity}"`
-		}
-	}
+	let content=`<path d="${path}"`
+	content+=addFillAttributes(fill,fillOpacity)
+	content+=addStrokeAttributes(stroke,strokeWidth,strokeOpacity)
 	content+=`/>\n`
 
 	return content
@@ -171,17 +287,38 @@ function generateCombinedPathElement(
 function generateHolePathElement(
 	fx: n2s, fy: n2s,
 	s: number,
-	fill: string,
-	strokeWidth: number
+	fill: string, fillOpacity: number,
+	stroke: string, strokeWidth: number, strokeOpacity: number
 ): string {
 	const holeRadius=4
 
-	let content=`<path d="${computeHolePathCommands(fx,fy,holeRadius,s)}" fill="${fill}" stroke="currentColor"`
-	if (strokeWidth!=1) {
-		content+=` stroke-width="${strokeWidth}"`
-	}
+	let content=`<path d="${computeHolePathCommands(fx,fy,holeRadius,s)}"`
+	content+=addFillAttributes(fill,fillOpacity)
+	content+=addStrokeAttributes(stroke,strokeWidth,strokeOpacity)
 	content+=`/>\n`
 
+	return content
+}
+
+function addFillAttributes(fill: string, fillOpacity=1): string {
+	let content=` fill="${fill}"`
+	if (fill!='none' && fillOpacity!=1) {
+		content+=` fill-opacity="${fillOpacity}"`
+	}
+	return content
+}
+
+function addStrokeAttributes(stroke: string, strokeWidth: number, strokeOpacity=1): string {
+	let content=``
+	if (strokeWidth>0) {
+		content+=` stroke="${stroke}"`
+		if (strokeWidth!=1) {
+			content+=` stroke-width="${strokeWidth}"`
+		}
+		if (strokeOpacity!=1) {
+			content+=` stroke-opacity="${strokeOpacity}"`
+		}
+	}
 	return content
 }
 
